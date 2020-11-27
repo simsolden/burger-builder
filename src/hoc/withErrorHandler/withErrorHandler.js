@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../components/UI/Modal/Modal';
+
 const withErrorHandler = (WrappedComponent, axios) => {
   const WithErrorHandler = (props) => {
     const [error, setError] = useState(null);
