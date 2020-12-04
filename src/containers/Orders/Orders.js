@@ -1,39 +1,24 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 // import classes from './Orders.module.css'
 
 import Order from '../../components/Order/Order';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../store/actions/index';
 
 class Orders extends Component {
-  state = {
-    orders: [],
-    loading: true,
-  };
-
   componentDidMount() {
-    this.setState({ loading: true });
-    axios
-      .get('orders.json')
-      .then((response) => {
-        const fetchedOrders = [];
-        for (let key in response.data) {
-          fetchedOrders.push({ ...response.data[key], id: key });
-        }
-        this.setState({ loading: false, orders: fetchedOrders });
-      })
-      .catch((error) => console.error(error));
+    this.props.onFetchOrders(this.props.token);
   }
 
   render() {
-    let orders = null;
-    if (this.state.loading) {
-      orders = <Spinner />;
-    } else {
-      orders = (
+    let orders = <Spinner />;
+    if (!this.props.loading) {
+      orders = orders = (
         <React.Fragment>
-          {this.state.orders.map((order) => {
+          {this.props.orders.map((order) => {
             return (
               <Order
                 key={order.id}
@@ -44,9 +29,27 @@ class Orders extends Component {
           })}
         </React.Fragment>
       );
+    } else {
     }
-    return <div className="">{orders}</div>;
+    return orders;
   }
 }
 
-export default withErrorHandler(Orders, axios);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onFetchOrders: (token) => dispatch(actions.fetchOrders(token)),
+  };
+};
+
+const mapstateToProps = (state) => {
+  return {
+    orders: state.order.orders,
+    loading: state.order.loading,
+    token: state.auth.token,
+  };
+};
+
+export default connect(
+  mapstateToProps,
+  mapDispatchToProps
+)(withErrorHandler(Orders, axios));

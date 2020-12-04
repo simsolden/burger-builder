@@ -1,5 +1,5 @@
-.ContactData {
-  margin: 20px auto;
+.Form {
+  margin: 25vh auto;
   width: 80%;
   text-align: center;
   box-shadow: 0 2px 3px #ccc;
@@ -10,7 +10,7 @@
   transition: all 0.3s ease-in-out;
 }
 
-.ContactData:focus-within {
+.Form:focus-within {
   box-shadow: 0 10px 15px #ccc;
   transform: scale(1.015);
   @media screen and (prefers-reduced-motion: reduce) {
@@ -25,7 +25,7 @@
   margin: auto;
 }
 @media (min-width: 600px) {
-  .ContactData {
+  .Form {
     width: 500px;
   }
 }

@@ -23,12 +23,12 @@ const withErrorHandler = (WrappedComponent, axios) => {
       };
     }, [requestInterceptor, responseInterceptor]);
     return (
-      <>
+      <React.Fragment>
         <Modal show={error !== null} modalClosed={() => setError(null)}>
           {error ? error.message : null}
         </Modal>
         <WrappedComponent {...props} />
-      </>
+      </React.Fragment>
     );
   };
   return WithErrorHandler;

@@ -3,13 +3,18 @@ import classes from './Input.module.css';
 
 const input = (props) => {
   let inputElement = null;
+  const inputClasses = [classes.InputElement];
+
+  if (props.invalid && props.shouldValidate && props.touched) {
+    inputClasses.push(classes.Invalid);
+  }
 
   switch (props.elementType) {
     case 'input':
       inputElement = (
         <input
           onChange={props.changed}
-          className={classes.InputElement}
+          className={inputClasses.join(' ')}
           {...props.elementConfig}
           value={props.value}
         />
@@ -19,7 +24,7 @@ const input = (props) => {
       inputElement = (
         <textarea
           onChange={props.changed}
-          className={classes.InputElement}
+          className={inputClasses.join(' ')}
           {...props.elementConfig}
           value={props.value}
         />
@@ -29,11 +34,15 @@ const input = (props) => {
       inputElement = (
         <select
           onChange={props.changed}
-          className={classes.InputElement}
+          className={inputClasses.join(' ')}
           value={props.value}
         >
           {props.elementConfig.options.map((option) => {
-            return <option value={option.value}>{option.displayValue}</option>;
+            return (
+              <option value={option.value} key={option.value}>
+                {option.displayValue}
+              </option>
+            );
           })}
         </select>
       );
@@ -42,16 +51,24 @@ const input = (props) => {
       inputElement = (
         <input
           onChange={props.changed}
-          className={classes.InputElement}
+          className={inputClasses.join(' ')}
           {...props.elementConfig}
           value={props.value}
         />
       );
   }
+
+  let validationError = null;
+  if (props.invalid && props.touched) {
+    validationError = (
+      <p className={classes.ValidationError}>Please enter a valid value!</p>
+    );
+  }
   return (
     <div className={classes.Input}>
       <label className={classes.Label}>{props.label}</label>
       {inputElement}
+      {validationError}
     </div>
   );
 };
